@@ -33,26 +33,24 @@ beq $t2, ' ', PUNCTUATION
 j CONTINUE_LOOP
 
 PUNCTUATION:
-        #if punctuation, then check is before a space - if yes skip space, else continue
+        #if space, then check is after a space - if yes skip space, else continue
         addi $t0, $t0, 1
         lb $t2, 0($t0)
         
         #checking for potential punctuation
         CHECK1:
-        blt $t2, '!', CONTINUE_LOOP
+        blt $t2, '!', CONTINUE
         bgt $t2, '/', CHECK2
-        j SKIP_OVER
+        j CONTINUE_LOOP
 
         CHECK2:
-        blt     $t2,':', CONTINUE_LOOP
-        bgt     $t2, '@', CONTINUE_LOOP
-        j SKIP_OVER
+        blt     $t2,':', CONTINUE
+        bgt     $t2, '@', CONTINUE
+        j CONTINUE_LOOP
 
-
-SKIP_OVER:
-        addi $t0, $t0, -1
-        lb $t2, 0($t0)
-        lb   $t2, 0($t0) 
+CONTINUE:
+addi $t0, $t0, -1
+lb $t2, 0($t0)
 
 CONTINUE_LOOP:
 sb      $t2, 0($t1)
